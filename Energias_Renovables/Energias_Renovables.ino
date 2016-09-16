@@ -58,19 +58,22 @@ boolean Llega_Hora = false;
 boolean Llega_Dato = false;
 boolean Lectura_de_SD=false;
 boolean Act = false;
+boolean archivo=false;
 File dataFile ;
 
 void loop() {
 
-     // turn the LED on (HIGH is the voltage level)
-  
+    
+  if(archivo==true){
+    Archivo();
+  }
   Serie1();
   WebServer();
   Actualizar(contadorDatos);
    SD_Guardar();
    SD_Leer();
   Serie_Borrar_SD();
-   digitalWrite(13, LOW);    // turn the LED off by making the voltage LOW
+  
    
 }
 

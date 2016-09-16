@@ -3,7 +3,9 @@ void Serie_Borrar_SD() {
     Serial.read();
     // delete the file:
   Serial.println("Removing example.txt...");
-  SD.remove("dataFile.txt");
+ // SD.open("datalog.txt");
+  SD.remove("datalog.txt");
+  //dataFile.close();
 
   if (SD.exists("dataFile.txt")){ 
     Serial.println("example.txt exists.");

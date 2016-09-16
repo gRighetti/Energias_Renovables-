@@ -1,9 +1,5 @@
 void SD_Guardar(void) {
   if (fin_trama) {
-    // make a string for assembling the data to log:
-    //String dataString = "";
-    // open the file. note that only one file can be open at a time,
-    // so you have to close this one before opening another.
      dataFile = SD.open("datalog.txt", FILE_WRITE);
     fin_trama = false;
     if (Llega_Hora) {

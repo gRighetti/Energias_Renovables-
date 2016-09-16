@@ -79,7 +79,9 @@
 							 client.println("<tr>");
 								 client.println("<td>Frecuencia</td>");
 								 client.print("<td>");
-                                                                 client.print(FRECUENCIA);
+                                                                 client.print(freTenEnt);
+                                                                 client.print("." );
+                                                                 client.print(freTenDec);
                                                                  client.print("</td>");
 							 client.println("</tr>");
 							 client.println("<tr>");

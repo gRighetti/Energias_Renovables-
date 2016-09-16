@@ -10,17 +10,19 @@ const int chipSelect = 4;
 byte mac[] = {
   0x98, 0x4F, 0xEE, 0x01, 0x0D, 0x98
 };
-IPAddress ip(169, 254, 203, 190);
+IPAddress ip(169, 254, 203, 233);
 // Initialize the Ethernet server library
 // with the IP address and port you want to use
 // (port 80 is default for HTTP):
 EthernetServer server(80);
 void setup() {
+  pinMode(13, OUTPUT);
+  
   // Open serial communications and wait for port to open:
   Serial.begin(9600); delay(5000);
   Serial1.begin(9600); delay(5000);
   // start the Ethernet connection and the server:
-  Ethernet.begin(mac, ip);
+   Ethernet.begin(mac, ip);
   server.begin();
   Serial.print("server is at ");
   Serial.println(Ethernet.localIP());
@@ -46,6 +48,7 @@ int TENSIONDELINEA, CORRIENTEDELINEA, TENSIONDELINVERSOR, CORRIENTEDELINVERSOR, 
 String ESTADO;
 int contador = 0;
 byte  deltaTensionRed, contadorDePaquetes, freTenDec, freTenEnt, freCorDec, freCorEnt, desfDec, desfEnt, tenTierra, delTensInt, corrInt, tenCont, estado, corrCont;
+byte Estado, temp11,temp12,temp21,temp22,temp31,temp32,temp41,temp42,Humedad,PWM,hora1,hora2,hora3,hora4,ff1,ff2,ff3,ff4;
 
 byte Datos[22];
 int contadorDatos = 0;
@@ -54,27 +57,21 @@ boolean fin_trama = false;
 boolean Llega_Hora = false;
 boolean Llega_Dato = false;
 boolean Lectura_de_SD=false;
-//boolean Actualizar = false;
+boolean Act = false;
 File dataFile ;
 
 void loop() {
-  TENSIONDELINEA = Datos[2];
-  CORRIENTEDELINEA = Datos[2];
-  TENSIONDELINVERSOR = Datos[4];
-  CORRIENTEDELINVERSOR = Datos[5];
-  FRECUENCIA=Datos[6];
-  FASE=Datos[7];
-  TEMPERATURA=Datos[12];
-  OTRO=Datos[15];
+
+     // turn the LED on (HIGH is the voltage level)
   
   Serie1();
-  
   WebServer();
-  
-  Actualizar();
-  SD_Guardar();
-  SD_Leer();
+  Actualizar(contadorDatos);
+   SD_Guardar();
+   SD_Leer();
   Serie_Borrar_SD();
+   digitalWrite(13, LOW);    // turn the LED off by making the voltage LOW
+   
 }
 
 

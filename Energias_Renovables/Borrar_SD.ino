@@ -11,6 +11,15 @@ void Serie_Borrar_SD() {
       Serial.println("datalog.txt doesn't exist.");
     }
 
+    SD.remove("info.txt");
+    archivo = true;
+    if (SD.exists("info.txt")) {
+      Serial.println("info.txt exists.");
+    }
+    else {
+      Serial.println("info.txt doesn't exist.");
+    }
+
   }
 
 }

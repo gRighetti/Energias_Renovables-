@@ -1,9 +1,9 @@
 void Actualizar(int contDatos) {
-
-  contador = 0;
+    contador = 0;
 
   if (Act && Llega_Dato) {
     Serial.println("Entra a actualizar datos" );
+    
     Act = false;
     //Llega_Dato = false;
     while (contador < 23) {
@@ -12,16 +12,17 @@ void Actualizar(int contDatos) {
       switch (contador) {
 
         case (1):
-          //determinar bien el valor
-          TENSIONDELINEA = 311 + Datos[0];
+  
+          TensiondeRed = 311 + (signed char)Datos[0];
+
           Serial.print("delta de tension:  " );
-          Serial.println(TENSIONDELINEA );
+          Serial.println(TensiondeRed );
           break;
 
         case (2):
           Serial.print("Corriente de red:  " );
-          CORRIENTEDELINEA = Datos[1];
-          Serial.println(CORRIENTEDELINEA);
+          CorrientedeRed = (uint8_t)Datos[1];
+          Serial.println(CorrientedeRed);
 
           break;
         case (3):
@@ -38,25 +39,25 @@ void Actualizar(int contDatos) {
 
           break;
         case (5):
-          desfDec = Datos[4];
-
+          desfDec = Datos[4] & 7;
           break;
         case (6):
-          //acomodar bien el valor
+          desfEnt = (uint16_t)Datos[5];
+          desfEnt = desfEnt << 5;
+          desfEnt = desfEnt | (Datos[4] >> 3);
           Serial.print("Desfasaje" );
-          desfEnt = Datos[5];
           Serial.print(desfEnt);
-          Serial.print("°." );
+          Serial.print(" °. " );
           Serial.println(desfDec);
           break;
         case (7):
           Serial.print("Tension-Tierra" );
-          tenTierra = Datos[6];
-          Serial.println(tenTierra);
+          TensionTierra = Datos[6];
+          Serial.println(TensionTierra);
           break;
         case (8):
           //determinar bien el valor
-          delTensInt = 311 + Datos[7];
+          delTensInt = 311 + (signed char)Datos[7];
           Serial.print("delta de tension interna:  " );
           Serial.println(delTensInt );;
           break;
@@ -68,7 +69,7 @@ void Actualizar(int contDatos) {
         case (10):
           Serial.print("Tension-Continua  " );
           tenCont = Datos[9];
-          Serial.println(tenTierra);
+          Serial.println(tenCont);
           break;
         case (11):
           Serial.print("Corriente-Continua  " );
@@ -76,9 +77,41 @@ void Actualizar(int contDatos) {
           Serial.println(corrCont);
           break;
         case (12):
-          Serial.print("Estado  " );
-          Estado = Datos[11];
-          Serial.println(Estado);
+          if (Datos[11] == 0) {
+            Serial.println("ESTADO: ");
+            ESTADO = "OK";
+            Serial.println(ESTADO);
+
+          } else {
+
+            if ((Datos[11] & 1)) {
+
+              Serial.println("ESTADO: ");
+              ESTADO = "High Voltage";
+              Serial.println(ESTADO);
+            }
+
+            if ((Datos[11] & 2)) {
+              Serial.println("ESTADO: ");
+              ESTADO = "Low Voltage";
+              Serial.println(ESTADO);
+            }
+            if ((Datos[11] & 4)) {
+              Serial.println("ESTADO: ");
+              ESTADO = "Low FREQ";
+              Serial.println(ESTADO);
+            }
+            if ((Datos[11] & 8)) {
+              Serial.println("ESTADO: ");
+              ESTADO = "High FREQ";
+              Serial.println(ESTADO);
+            }
+            if ((Datos[11] & 16)) {
+              Serial.println("ESTADO: ");
+              ESTADO = "High GND";
+              Serial.println(ESTADO);
+            }
+          }
           break;
         case (13):
           Serial.print("Temp11  " );
@@ -138,7 +171,7 @@ void Actualizar(int contDatos) {
   if (Act && Llega_Hora) {
     Serial.println("Entra a actualizar hora" );
     Act = false;
-  //  Llega_Hora = false;
+    //  Llega_Hora = false;
     while (contador < 8) {
       contador++;
       switch (contador) {
@@ -163,22 +196,26 @@ void Actualizar(int contDatos) {
         case (4):
           Serial.print("hora1: ");
           hora1 = Datos[3];
+          hora11 = hora1;
           Serial.println(hora1);
 
           break;
         case (5):
           Serial.print("hora2: ");
           hora2 = Datos[4];
+          hora21 = hora2 << 8;
           Serial.println(hora2);
           break;
         case (6):
           Serial.print("hora3: ");
           hora3 = Datos[5];
+          hora31 = hora3 << 16;
           Serial.println(hora3);
           break;
         case (7):
           Serial.print("hora4: ");
           hora4 = Datos[6];
+          hora41 = hora4 << 24;
           Serial.println(hora4);
           break;
         case (8):
@@ -188,6 +225,33 @@ void Actualizar(int contDatos) {
           break;
       }
     }
+
+    //acomodo la hora en un 32bits para unix
+    horaUnix = hora11 | hora21 | hora31 | hora41;
+    Serial.print("hora ya en unix:  ");
+    Serial.println(hora);
+    Serial.println(hora, BIN);
+    setTime(horaUnix) ;
+    hora=hour();
+    Serial.print(hour());
+    Serial.print(" ");
+    minuto=minute();
+    Serial.print(minute());
+    Serial.print(" ");
+    segundo=second();
+    Serial.print(second());
+    Serial.print(" ");
+    Serial.print(" ");
+    dia=day();
+    Serial.print(day());
+    Serial.print(" ");
+    mes=month();
+    Serial.print(month());
+    Serial.print(" ");
+    anio=year();
+    Serial.print(year());
+    Serial.println();
+    
   }
 }
 

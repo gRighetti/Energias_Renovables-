@@ -11,5 +11,17 @@ void SD_Leer(void){
   } else {
     Serial.println("error opening datalog.txt");
   }
+
+  dataArchivo = SD.open("info.txt");
+  if (dataArchivo) {
+      Serial.println("Lectura del archivo info.txt: ");
+    while (dataArchivo.available()) {
+      Serial.write(dataArchivo.read());
+    }
+    dataArchivo.close();
+  } else {
+    Serial.println("error opening info.txt");
+  }
+  
   }
 }

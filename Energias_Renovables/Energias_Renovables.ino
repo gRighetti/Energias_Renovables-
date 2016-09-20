@@ -1,7 +1,12 @@
+#include <SD.h>
+
+#include <Ethernet.h>
+
+#include <Time.h>
+#include <TimeLib.h>
 
 #include <SPI.h>
-#include <Ethernet.h>
-#include <SD.h>
+
 const int chipSelect = 4;
 
   
@@ -45,11 +50,12 @@ void setup() {
 }
 
 int TENSIONDELINEA, CORRIENTEDELINEA, TENSIONDELINVERSOR, CORRIENTEDELINVERSOR, FRECUENCIA, FASE, TEMPERATURA, dato, OTRO, i;
-String ESTADO;
+String ESTADO,t;
 int contador = 0;
-byte  deltaTensionRed, contadorDePaquetes, freTenDec, freTenEnt, freCorDec, freCorEnt, desfDec, desfEnt, tenTierra, delTensInt, corrInt, tenCont, estado, corrCont;
-byte Estado, temp11,temp12,temp21,temp22,temp31,temp32,temp41,temp42,Humedad,PWM,hora1,hora2,hora3,hora4,ff1,ff2,ff3,ff4;
-
+byte  TensiondeRed, CorrientedeRed, freTenDec, freTenEnt, freCorDec, freCorEnt, desfDec, TensionTierra, delTensInt, corrInt, tenCont, estado, corrCont;
+byte Estado, temp11,temp12,temp21,temp22,temp31,temp32,temp41,temp42,Humedad,PWM,ff1,ff2,ff3,ff4,hora1,hora2,hora3,hora4;
+uint32_t hora11,hora21,hora31,hora41,horaUnix,hora,segundo,minuto,dia,mes,anio;
+uint16_t desfEnt;
 byte Datos[22];
 int contadorDatos = 0;
 int contadorHora = 0;
@@ -59,7 +65,7 @@ boolean Llega_Dato = false;
 boolean Lectura_de_SD=false;
 boolean Act = false;
 boolean archivo=false;
-File dataFile ;
+File dataFile, dataArchivo;
 
 void loop() {
 

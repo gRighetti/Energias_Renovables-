@@ -32,7 +32,7 @@ void Actualizar(int contDatos) {
 
           break;
         case (4):
-          freTenDec = Datos[3];
+          freTenEnt = Datos[3];
           Serial.print(freTenEnt);
           Serial.print("." );
           Serial.println(freTenDec);
@@ -227,6 +227,8 @@ void Actualizar(int contDatos) {
     }
 
     //acomodo la hora en un 32bits para unix
+    ///*
+    
     horaUnix = hora11 | hora21 | hora31 | hora41;
     Serial.print("hora ya en unix:  ");
     Serial.println(hora);
@@ -251,7 +253,7 @@ void Actualizar(int contDatos) {
     anio=year();
     Serial.print(year());
     Serial.println();
-    
+   //*/
   }
 }
 

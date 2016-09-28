@@ -56,7 +56,7 @@ byte  TensiondeRed, CorrientedeRed, freTenDec, freTenEnt, freCorDec, freCorEnt, 
 byte Estado, temp11,temp12,temp21,temp22,temp31,temp32,temp41,temp42,Humedad,PWM,ff1,ff2,ff3,ff4,hora1,hora2,hora3,hora4;
 uint32_t hora11,hora21,hora31,hora41,horaUnix,hora,segundo,minuto,dia,mes,anio;
 uint16_t desfEnt;
-byte Datos[22];
+byte Datos[23];
 int contadorDatos = 0;
 int contadorHora = 0;
 boolean fin_trama = false;

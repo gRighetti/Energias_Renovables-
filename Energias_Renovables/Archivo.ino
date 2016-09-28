@@ -63,6 +63,8 @@ void Archivo() {
 
 
   dataArchivo = SD.open("info.txt", FILE_WRITE);
+  dataArchivo.print("BYTE0");
+  dataArchivo.print(";");
   dataArchivo.print("BYTE1");
   dataArchivo.print(";");
    dataArchivo.print("BYTE2");
@@ -105,9 +107,8 @@ void Archivo() {
   dataArchivo.print(";");
    dataArchivo.print("BYTE21");
   dataArchivo.print(";");
-   dataArchivo.print("BYTE22");
-  dataArchivo.print(";");
-   dataArchivo.println("BYTE23");
+   dataArchivo.println("BYTE22");
+  
 
   if (dataArchivo) {
     // dataFile.println(dataString);

@@ -71,10 +71,16 @@ void SD_Guardar(void) {
       dataFile.print(delTensInt);
       dataFile.print(";");
 
-      dataFile.print(tenCont);
+      dataFile.print(corrInt);
       dataFile.print(";");
 
-      dataFile.print(corrCont);
+      dataFile.print(tenCont);
+      dataFile.print(";");
+      
+       dataFile.print(corrCont);
+      dataFile.print(";");
+      
+      dataFile.print(ESTADO);
       dataFile.print(";");
 
 
@@ -102,6 +108,7 @@ void SD_Guardar(void) {
       dataFile.print(";");
 
       dataFile.print(PWM);
+      dataFile.print(";");
 
       dataFile.print(hora);
       dataFile.print(";");

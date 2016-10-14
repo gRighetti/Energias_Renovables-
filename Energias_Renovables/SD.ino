@@ -20,7 +20,7 @@ void SD_Guardar(void) {
       dataArchivo.println();
       if (dataArchivo) {
         dataArchivo.close();
-        Serial.println("Se guardo correctamenteen la SD: info.txt");
+       // Serial.println("Se guardo correctamenteen la SD: info.txt");
       }
       else {
         Serial.println("error opening info.txt");
@@ -42,7 +42,7 @@ void SD_Guardar(void) {
       dataArchivo.println();
       if (dataArchivo) {
         dataArchivo.close();
-        Serial.println("Se guardo correctamenteen la SD: info.txt");
+       // Serial.println("Se guardo correctamenteen la SD: info.txt");
       }
       else {
         Serial.println("error opening info.txt");
@@ -120,8 +120,7 @@ void SD_Guardar(void) {
       dataFile.print(";");
       dataFile.print(mes);
       dataFile.print(";");
-      dataFile.print(anio);
-      dataFile.println(";");
+      dataFile.println(anio);
 
 
       if (dataFile) {

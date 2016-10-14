@@ -14,7 +14,7 @@ void Serie1() {
     contadorDatos++;
     if (contadorHora == 3 && contadorDatos == 3) {
       Llega_Hora = true;
-      Serial.println("Horaaaa");
+     // Serial.println("Horaaaa");
     }
 
    

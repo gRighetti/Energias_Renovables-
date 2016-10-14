@@ -1,10 +1,7 @@
 #include <SD.h>
-
 #include <Ethernet.h>
-
 #include <Time.h>
 #include <TimeLib.h>
-
 #include <SPI.h>
 
 const int chipSelect = 4;
@@ -15,7 +12,7 @@ const int chipSelect = 4;
 byte mac[] = {
   0x98, 0x4F, 0xEE, 0x01, 0x0D, 0x98
 };
-IPAddress ip(169, 254, 203, 233);
+IPAddress ip(100, 100, 144, 210);
 // Initialize the Ethernet server library
 // with the IP address and port you want to use
 // (port 80 is default for HTTP):
@@ -45,6 +42,7 @@ void setup() {
     return;
   }
   Serial.println("card initialized.");
+ // system("install vsftpd openssh-sftp-server");
 
 
 }
@@ -65,12 +63,14 @@ boolean Llega_Dato = false;
 boolean Lectura_de_SD=false;
 boolean Act = false;
 boolean archivo=false;
+boolean mail=false;
 File dataFile, dataArchivo;
 
 void loop() {
 
     
   if(archivo==true){
+    Serial.println(Ethernet.localIP());
     Archivo();
   }
   Serie1();
@@ -79,6 +79,12 @@ void loop() {
    SD_Guardar();
    SD_Leer();
   Serie_Borrar_SD();
+
+  if(mail){
+    mail=false;
+    Serial.println("mandando mail");
+    system("python /media/realroot/mail5.py");
+  }
   
    
 }

@@ -12,7 +12,8 @@ const int chipSelect = 4;
 byte mac[] = {
   0x98, 0x4F, 0xEE, 0x01, 0x0D, 0x98
 };
-IPAddress ip(100, 100, 144, 210);
+//IPAddress ip(100, 100, 144, 210);   //ucc facu
+IPAddress ip(192, 168, 0, 102);
 // Initialize the Ethernet server library
 // with the IP address and port you want to use
 // (port 80 is default for HTTP):
@@ -49,6 +50,7 @@ void setup() {
 
 int TENSIONDELINEA, CORRIENTEDELINEA, TENSIONDELINVERSOR, CORRIENTEDELINVERSOR, FRECUENCIA, FASE, TEMPERATURA, dato, OTRO, i;
 String ESTADO,t;
+String direccion_mail,direccion_mail1,direccion_mail2;
 int contador = 0;
 byte  TensiondeRed, CorrientedeRed, freTenDec, freTenEnt, freCorDec, freCorEnt, desfDec, TensionTierra, delTensInt, corrInt, tenCont, estado, corrCont;
 byte Estado, temp11,temp12,temp21,temp22,temp31,temp32,temp41,temp42,Humedad,PWM,ff1,ff2,ff3,ff4,hora1,hora2,hora3,hora4;
@@ -64,7 +66,7 @@ boolean Lectura_de_SD=false;
 boolean Act = false;
 boolean archivo=false;
 boolean mail=false;
-File dataFile, dataArchivo;
+File dataFile, dataArchivo,mailFile ;
 
 void loop() {
 
@@ -73,7 +75,7 @@ void loop() {
     Serial.println(Ethernet.localIP());
     Archivo();
   }
-  Serie1();
+ // Serie1();
   WebServer();
   Actualizar(contadorDatos);
    SD_Guardar();
@@ -82,8 +84,35 @@ void loop() {
 
   if(mail){
     mail=false;
+
+    mailFile = SD.open("mail.txt", FILE_WRITE);
+    mailFile.print(direccion_mail);
+    mailFile.close();
+
+    mailFile = SD.open("mail.txt");
+   if (mailFile) {
+      Serial.println("Lectura del archivo mail.txt: ");
+    while (mailFile.available()) {
+      Serial.write(mailFile.read());
+    }
+    Serial.println("");
+    mailFile.close();
+  } else {
+    Serial.println("error opening mail.txt");
+  }
+
+    
     Serial.println("mandando mail");
     system("python /media/realroot/mail5.py");
+   
+    SD.remove("mail.txt");
+    if (SD.exists("mail.txt")) {
+      Serial.println("mail.txt exists.");
+    }
+    else {
+      Serial.println("mail.txt doesn't exist.");
+    }
+    
   }
   
    

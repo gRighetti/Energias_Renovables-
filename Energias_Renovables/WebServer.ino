@@ -14,27 +14,50 @@ void WebServer() {
 
       if (client.available()) {
         char c = client.read();
-        // Serial.write(c);
+        Serial.write(c);
         if (!(c == '\n') && linea) {
           t += (String)c;
         } else {
           linea = false;
         }
-        
+        // GET /inicio.html?ingresatexto=guido HTTP/1.1
         //GET /HOla HTTP/1.1
         // if you've gotten to the end of the line (received a newline
         // character) and the line is blank, the http request has ended,
         // so you can send a reply
+
         if (c == '\n' && currentLineIsBlank) {
           Serial.println(t);
 
-          Serial.println(t.indexOf('/'));
-          Serial.println(t.indexOf(' ', (t.indexOf('/') + 1)));
-          t = t.substring (t.indexOf('/') + 1, t.indexOf(' ', (t.indexOf('/') + 1)) );
-          Serial.println(t);
+
+          if (t.indexOf('?') > 0) {
+            direccion_mail = "";
+            direccion_mail1 ="";
+            direccion_mail2 ="";
+            Serial.println(t.indexOf('/'));
+            Serial.println(t.indexOf(' ', (t.indexOf('?') + 1)));
+            direccion_mail = t.substring (t.indexOf('=') + 1, t.indexOf(' ', (t.indexOf('/') + 1)) );
+            t = t.substring (t.indexOf('/') + 1, t.indexOf('?', (t.indexOf('/') + 1)) );
+            Serial.println(direccion_mail);
+            direccion_mail1 = direccion_mail.substring (0, direccion_mail.indexOf('%') );
+            direccion_mail1 = direccion_mail1 + "@";
+            direccion_mail2 = direccion_mail.substring (direccion_mail.indexOf('%')+3 );
+            direccion_mail = direccion_mail1 + direccion_mail2;
+            Serial.println(direccion_mail);
+            Serial.println(t);
+          } else {
+            Serial.println("entra aca");
+            Serial.println(t.indexOf('/'));
+            Serial.println(t.indexOf(' ', (t.indexOf('/') + 1)));
+            t = t.substring (t.indexOf('/') + 1, t.indexOf(' ', (t.indexOf('/') + 1)) );
+            Serial.println(t);
+
+          }
+
+
           if (t == "inicio.html" || t == "" ) {
             Serial.println("GET inicio.html");
-         
+
             client.println("HTTP/1.1 200 OK");
             client.println("Content-Type: text/html");
             client.println("Connection: close");
@@ -42,12 +65,12 @@ void WebServer() {
             client.println("<!DOCTYPE HTML>");
             client.println("<html>");
             // add a meta refresh tag, so the browser pulls again every 5 seconds:
-            client.println("<meta http-equiv=\"refresh\" content=\"5\">");
+            client.println("<meta http-equiv=\"refresh\" content=\"3000\">");
 
 
             client.println("<head>");
             client.println("<title> UCC </title>");
-            client.println("<head>");
+            client.println("</head>");
             client.println("<body>");
 
 
@@ -211,14 +234,14 @@ void WebServer() {
 
           if (t == "historial.html") {
             Serial.println("GET  Historial.html");
-                client.println("HTTP/1.1 200 OK");
+            client.println("HTTP/1.1 200 OK");
             client.println("Content-Type: text/html");
             client.println("Connection: close");
             client.println();
             client.println("<!DOCTYPE HTML>");
             client.println("<html>");
             // add a meta refresh tag, so the browser pulls again every 5 seconds:
-            //client.println("<meta http-equiv=\"refresh\" content=\"5\">");
+            //client.println("<meta http-equiv=\"refresh\" content=\"30\">");
 
 
             client.println("<head>");
@@ -233,56 +256,66 @@ void WebServer() {
             client.println("<br/>");
             client.println("<br/>");
             client.println("<h3>Historial Proximamente.....</h3>");
-             client.println("</body>");
+
+             client.println("<br>");
+            client.println("</br>");
+            client.println(" <td style=\"text-align: center;\"><a href=\"inicio.html\">VOLVER AL INICIO</a></td>");
+            client.println("</body>");
             client.println("</html>");
-            
+
           }
           if (t == "mail.html") {
             Serial.println("GET  Mail.html");
-             client.println("HTTP/1.1 200 OK");
+            client.println("HTTP/1.1 200 OK");
             client.println("Content-Type: text/html");
             client.println("Connection: close");
             client.println();
-client.println("<!DOCTYPE HTML>");
-            client.println("<html>");
-client.println("<meta charset=\"utf-8\">");
-client.println("<title>UCC</title>");
-client.println("</head>");
-client.println("<body>");
-client.println("<form method=\"post\" action=\"action.php\">");
-                    client.println(" Ingresa un texto: <input name=\"ingresatexto\" type=\"text\" value=\"Por favor, ingresa aquí el mail\" />");
-client.println("</form>");
-client.println("</body>");
-client.println("</html>");
-            
-
-/*
-            
             client.println("<!DOCTYPE HTML>");
             client.println("<html>");
-            // add a meta refresh tag, so the browser pulls again every 5 seconds:
-            //client.println("<meta http-equiv=\"refresh\" content=\"5\">");
-
-
+            client.println("<meta charset=\"utf-8\">");
             client.println("<head>");
-            client.println("<title> UCC </title>");
-            client.println("<head>");
+            client.println("<title>UCC</title>");
+            client.println("</head>");
             client.println("<body>");
-            client.println("<h1>Energia Renovable </h1>");
-            client.println("<h2>Informacion del Inversor</h2>");
-            client.println("<br/>");
-            client.println("<br/>");
-            client.println("<br/>");
-            client.println("<br/>");
-            client.println("<br/>");
-            client.println("<h3>Se Mando Mail</h3>");
-             client.println("</body>");
+            client.println("<form method=\"get\" action=\" mail_enviado.html\">");
+            client.println(" Ingresa un texto: <input name=\"mail\" type=\"text\" value=\"ingrese el mail\" />");
+            client.println("</form>");
+            client.println("</body>");
             client.println("</html>");
-            */
-            mail = true;
 
           }
-          // send a standard http response header
+
+
+          if (t == "mail_enviado.html") {
+            Serial.println("GET  Mail.html");
+            client.println("HTTP/1.1 200 OK");
+            client.println("Content-Type: text/html");
+            client.println("Connection: close");
+            client.println();
+            client.println("<!DOCTYPE HTML>");
+            client.println("<html>");
+            client.println("<meta charset=\"utf-8\">");
+            client.println("<head>");
+            client.println("<title>UCC</title>");
+            client.println("</head>");
+            client.println("<head>");
+            client.println("<h1>Energia Renovable </h1>");
+            client.println("<body>");
+            client.println("<h2>Se mando el mail a: </h2>");
+            client.print(direccion_mail);
+            client.println("</h2>");
+            client.println("<br>");
+            client.println("</br>");
+            client.println(" <td style=\"text-align: center;\"><a href=\"inicio.html\">VOLVER A LA PAGINA INICIAL</a></td>");
+
+            client.println("</body>");
+            client.println("</html>");
+            
+            mail = true;
+
+
+          }
+
 
           break;
         }
